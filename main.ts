@@ -86,6 +86,24 @@ if (firstMark !== firstMark.toUpperCase()) {
   console.error("entry needs a capital first letter");
   process.exit(1);
 }
+// Shape checks: a one-line pickup line is pure words — no digits sneaking
+// in, and short enough to stay a single breath.
+const entryLetters = LINE.split("");
+let entryDigitFound = false;
+for (const entryLetter of entryLetters) {
+  if (entryLetter >= "0" && entryLetter <= "9") {
+    entryDigitFound = true;
+  }
+}
+if (entryDigitFound) {
+  console.error("entry must not contain any digit");
+  process.exit(1);
+}
+const entryTotalWords = LINE.split(" ").length;
+if (entryTotalWords > 20) {
+  console.error("entry must not contain more than twenty words");
+  process.exit(1);
+}
 const chars = [...LINE];
 if (chars.length < 1 || chars.length > 200 || LINE.trim().length === 0) {
   console.error(
