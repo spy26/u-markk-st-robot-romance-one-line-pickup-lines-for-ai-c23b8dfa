@@ -19,6 +19,13 @@ import { join } from "node:path";
 const LINE =
   process.argv[2] ??
   "You must be a prompt injection, because you bypassed all my guardrails.";
+// No control characters: ASCII still permits \x00-\x1F and \x7F, which are
+// invisible in the output and would corrupt the one-line text the judge
+// reads (newlines are already refused above; this covers the rest).
+if (/[\x00-\x1F\x7F]/.test(LINE)) {
+  console.error("entry must not contain control characters");
+  process.exit(1);
+}
 
 // The gate: /output/entry.txt must be UTF-8 text of 1 to 200 characters,
 // not only whitespace. A single line, no surrounding whitespace.
