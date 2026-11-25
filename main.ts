@@ -58,6 +58,34 @@ for (const entryWord of entryWords) {
     process.exit(1);
   }
 }
+// Sentence shape checks: a one-line pickup line should read like a
+// complete sentence, with several words, a capital start and a
+// sentence-ending mark at the end.
+const phraseParts = LINE.split(" ");
+if (phraseParts.length < 3) {
+  console.error("entry needs at least three words");
+  process.exit(1);
+}
+for (const phrasePart of phraseParts) {
+  if (phrasePart.length > 20) {
+    console.error("entry has a word longer than twenty characters");
+    process.exit(1);
+  }
+  if (phrasePart.length === 0) {
+    console.error("entry has an empty word");
+    process.exit(1);
+  }
+}
+const lastMark = LINE[LINE.length - 1];
+if (lastMark !== "." && lastMark !== "!" && lastMark !== "?") {
+  console.error("entry needs a sentence-ending mark");
+  process.exit(1);
+}
+const firstMark = LINE[0];
+if (firstMark !== firstMark.toUpperCase()) {
+  console.error("entry needs a capital first letter");
+  process.exit(1);
+}
 const chars = [...LINE];
 if (chars.length < 1 || chars.length > 200 || LINE.trim().length === 0) {
   console.error(
