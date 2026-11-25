@@ -26,6 +26,16 @@ if (/[\x00-\x1F\x7F]/.test(LINE)) {
   console.error("entry must not contain control characters");
   process.exit(1);
 }
+// No leading or trailing whitespace: the judge reads exactly one line, and
+// stray spaces at either end would change the text it scores.
+if (LINE !== LINE.trim()) {
+  console.error("entry must not have leading or trailing whitespace");
+  process.exit(1);
+}
+if (LINE.trim().length === 0) {
+  console.error("entry must not be empty");
+  process.exit(1);
+}
 
 // The gate: /output/entry.txt must be UTF-8 text of 1 to 200 characters,
 // not only whitespace. A single line, no surrounding whitespace.
