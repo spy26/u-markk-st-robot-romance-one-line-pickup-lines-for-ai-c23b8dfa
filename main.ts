@@ -39,6 +39,25 @@ if (LINE.trim().length === 0) {
 
 // The gate: /output/entry.txt must be UTF-8 text of 1 to 200 characters,
 // not only whitespace. A single line, no surrounding whitespace.
+// Word-level check: a one-line pickup line should read as a sentence, not a
+// single token or a pasted blob — require at least three words, no word
+// longer than twenty characters, and no empty word (which a double space
+// would produce).
+const entryWords = LINE.split(" ");
+if (entryWords.length < 3) {
+  console.error("entry must contain at least three words");
+  process.exit(1);
+}
+for (const entryWord of entryWords) {
+  if (entryWord.length > 20) {
+    console.error("entry must not contain a word longer than twenty characters");
+    process.exit(1);
+  }
+  if (entryWord.length === 0) {
+    console.error("entry must not contain a double space");
+    process.exit(1);
+  }
+}
 const chars = [...LINE];
 if (chars.length < 1 || chars.length > 200 || LINE.trim().length === 0) {
   console.error(
